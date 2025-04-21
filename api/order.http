@@ -1,0 +1,41 @@
+# REST URL
+@protocol = http://
+@host = localhost
+@port = 8000
+@application-context =
+@version =
+@resource = /order
+@order-id = aaa-000
+@parameter = /{{order-id}}
+@baseUrl = {{protocol}}{{host}}:{{port}}{{application-context}}{{version}}{{resource}}
+@content-type-json = application/json
+
+# Create
+POST {{baseUrl}} HTTP/1.1
+Host: {{host}}:{{port}}
+Content-Type: {{content-type-json}}
+
+{
+    "id":"{{order-id}}",
+    "price": 100.5,
+    "tax": 0.5
+}
+###
+
+# Update
+PUT {{baseUrl}} HTTP/1.1
+Host: {{host}}:{{port}}
+Content-Type: {{content-type-json}}
+
+{
+    "id":"{{order-id}}",
+    "price": 150.75,
+    "tax": 7.75
+}
+###
+
+# Get by Id
+GET {{@baseUrl}}{{parameter}} HTTP/1.1
+Host: {{host}}:{{port}}
+Content-Type: {{content-type-json}}
+###
