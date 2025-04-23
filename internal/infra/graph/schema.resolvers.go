@@ -48,7 +48,66 @@ func (r *mutationResolver) UpdateOrder(ctx context.Context, input *model.OrderIn
 	}, nil
 }
 
+// ListOrder is the resolver for the listOrder field.
+func (r *queryResolver) ListOrder(ctx context.Context) ([]*model.Order, error) {
+	output, err := r.ListOrderUseCase.Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(output.List) == 0 {
+		return []*model.Order{}, nil
+	}
+
+	orders := make([]*model.Order, len(output.List))
+	for i, order := range output.List {
+		orders[i] = &model.Order{
+			ID:         order.ID,
+			Price:      float64(order.Price),
+			Tax:        float64(order.Tax),
+			FinalPrice: float64(order.FinalPrice),
+		}
+	}
+
+	return orders, nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
+
 type mutationResolver struct{ *Resolver }
+type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+/*
+	func (r *mutationResolver) ListOrder(ctx context.Context) ([]*model.Order, error) {
+	output, err := r.ListOrderUseCase.Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(output.List) == 0 {
+		return []*model.Order{}, nil
+	}
+
+	orders := make([]*model.Order, len(output.List))
+	for _, order := range output.List {
+		orders = append(orders, &model.Order{
+			ID:         order.ID,
+			Price:      float64(order.Price),
+			Tax:        float64(order.Tax),
+			FinalPrice: float64(order.FinalPrice),
+		})
+	}
+
+	return orders, nil
+}
+*/

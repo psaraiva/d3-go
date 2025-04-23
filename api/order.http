@@ -34,8 +34,8 @@ Content-Type: {{content-type-json}}
 }
 ###
 
-# Get by Id
-GET {{@baseUrl}}{{parameter}} HTTP/1.1
+# List
+GET {{baseUrl}}/list HTTP/1.1
 Host: {{host}}:{{port}}
 Content-Type: {{content-type-json}}
 ###

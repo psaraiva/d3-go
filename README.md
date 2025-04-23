@@ -62,4 +62,13 @@ mutation updateOrder{
     Tax
   }
 }
+
+query ListOrders {
+    listOrder {
+        id
+        Price
+        Tax
+        FinalPrice
+    }
+}
 ```

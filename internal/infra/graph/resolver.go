@@ -9,4 +9,5 @@ import "psaraiva/d3/internal/usecase"
 type Resolver struct {
 	CreateOrderUseCase usecase.CreateOrderUseCase
 	UpdateOrderUseCase usecase.UpdateOrderUseCase
+	ListOrderUseCase   usecase.ListOrderUseCase
 }

@@ -11,14 +11,18 @@ type OrderService struct {
 	pb.UnimplementedOrderServiceServer
 	CreateOrderUseCase usecase.CreateOrderUseCase
 	UpdateOrderUseCase usecase.UpdateOrderUseCase
+	ListOrderUseCase   usecase.ListOrderUseCase
 }
 
 func NewOrderService(
 	createOrderUseCase usecase.CreateOrderUseCase,
-	updateOrderUseCase usecase.UpdateOrderUseCase) *OrderService {
+	updateOrderUseCase usecase.UpdateOrderUseCase,
+	listOrderUseCase usecase.ListOrderUseCase,
+) *OrderService {
 	return &OrderService{
 		CreateOrderUseCase: createOrderUseCase,
 		UpdateOrderUseCase: updateOrderUseCase,
+		ListOrderUseCase:   listOrderUseCase,
 	}
 }
 
@@ -59,5 +63,26 @@ func (s *OrderService) UpdateOrder(ctx context.Context, in *pb.UpdateOrderReques
 		Price:      float32(output.Price),
 		Tax:        float32(output.Tax),
 		FinalPrice: float32(output.FinalPrice),
+	}, nil
+}
+
+func (s *OrderService) ListOrder(ctx context.Context, in *pb.Empty) (*pb.ListOrderResponse, error) {
+	output, err := s.ListOrderUseCase.Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	ListOrderItemResponses := make([]*pb.ListOrderItemResponse, len(output.List))
+	for i, item := range output.List {
+		ListOrderItemResponses[i] = &pb.ListOrderItemResponse{
+			Id:         item.ID,
+			Price:      float32(item.Price),
+			Tax:        float32(item.Tax),
+			FinalPrice: float32(item.FinalPrice),
+		}
+	}
+
+	return &pb.ListOrderResponse{
+		List: ListOrderItemResponses,
 	}, nil
 }
