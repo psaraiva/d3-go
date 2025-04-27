@@ -4,6 +4,7 @@
 - `docker-compose up -d`
 
 ## Run
+Navegue até a pasta ./cmd/ordersystem
 - `go run main.go wire_gen.go`
 
 ## RabbitMQ

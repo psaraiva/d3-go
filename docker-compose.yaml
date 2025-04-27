@@ -1,26 +1,28 @@
-version: '3'
-
 services:
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    restart: always
+  d3-mysql:
+    image: mysql:8.0
+    container_name: d3-mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: orders
-      MYSQL_PASSWORD: root
+    restart: always
     ports:
       - 3306:3306
     volumes:
-      - .docker/mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
+      - ./init-scripts/mysql:/docker-entrypoint-initdb.d
 
-  rabbitmq:
+  d3-rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq
+    container_name: d3-rabbitmq
+    environment:
+      RABBITMQ_USER: "guest"
+      RABBITMQ_PASS: "guest"
     restart: always
     ports:
       - 5672:5672
       - 15672:15672
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  mysql:
+    driver: local
