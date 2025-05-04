@@ -11,6 +11,8 @@ services:
     volumes:
       - mysql:/var/lib/mysql
       - ./init-scripts/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - d3-network
 
   d3-rabbitmq:
     image: rabbitmq:3-management
@@ -22,7 +24,29 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    networks:
+      - d3-network
+
+  d3-go:
+    build:
+      context: ./
+      dockerfile: ./docker/go/Dockerfile
+    container_name: d3-go
+    restart: always
+    ports:
+      - 7000:8000
+      - 7080:8080
+      - 40051:50051
+    depends_on:
+      - d3-mysql
+      - d3-rabbitmq
+    networks:
+      - d3-network
 
 volumes:
   mysql:
     driver: local
+
+networks:
+  d3-network:
+    driver: bridge

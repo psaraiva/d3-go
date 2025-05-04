@@ -60,5 +60,8 @@ func (s *WebServer) Start() {
 			}
 		}
 	}
-	http.ListenAndServe(s.WebServerPort, s.Router)
+	err := http.ListenAndServe(":"+s.WebServerPort, s.Router)
+	if err != nil {
+		panic(err)
+	}
 }

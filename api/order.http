@@ -1,18 +1,17 @@
 # REST URL
 @protocol = http://
 @host = localhost
-@port = 8000
+@port = 7000
 @application-context =
 @version =
 @resource = /order
 @order-id = aaa-000
-@parameter = /{{order-id}}
+@parameter = {{order-id}}
 @baseUrl = {{protocol}}{{host}}:{{port}}{{application-context}}{{version}}{{resource}}
 @content-type-json = application/json
 
 # Create
 POST {{baseUrl}} HTTP/1.1
-Host: {{host}}:{{port}}
 Content-Type: {{content-type-json}}
 
 {
@@ -24,7 +23,6 @@ Content-Type: {{content-type-json}}
 
 # Update
 PUT {{baseUrl}} HTTP/1.1
-Host: {{host}}:{{port}}
 Content-Type: {{content-type-json}}
 
 {
@@ -36,6 +34,5 @@ Content-Type: {{content-type-json}}
 
 # List
 GET {{baseUrl}}/list HTTP/1.1
-Host: {{host}}:{{port}}
 Content-Type: {{content-type-json}}
 ###
